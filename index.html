@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>航运日报 | Shipping Daily Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        header .subtitle {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        header .date {
+            margin-top: 15px;
+            font-size: 0.95em;
+            opacity: 0.8;
+        }
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .section h2 {
+            color: #1e3a5f;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2d5a87;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section h2 .icon {
+            font-size: 1.2em;
+        }
+        .index-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .index-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border-left: 4px solid #2d5a87;
+        }
+        .index-card .name {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        .index-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1e3a5f;
+        }
+        .index-card .change {
+            font-size: 0.95em;
+            margin-top: 5px;
+        }
+        .index-card .change.up {
+            color: #dc2626;
+        }
+        .index-card .change.down {
+            color: #16a34a;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: #475569;
+        }
+        tr:hover {
+            background: #f8fafc;
+        }
+        .news-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-item .title {
+            font-weight: 600;
+            color: #1e3a5f;
+            margin-bottom: 5px;
+        }
+        .news-item .source {
+            font-size: 0.85em;
+            color: #64748b;
+        }
+        .news-item .summary {
+            font-size: 0.95em;
+            color: #475569;
+            margin-top: 8px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+        .tag.shipping {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .tag.port {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .tag.policy {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .analysis-box {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+        }
+        .analysis-box h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .analysis-box ul {
+            list-style: none;
+        }
+        .analysis-box li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .analysis-box li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #60a5fa;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.9em;
+        }
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .stock-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+        }
+        .stock-card .stock-name {
+            font-weight: 600;
+            color: #1e3a5f;
+        }
+        .stock-card .stock-code {
+            font-size: 0.85em;
+            color: #64748b;
+        }
+        .stock-card .stock-price {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .stock-card .stock-change {
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            .index-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚢 航运日报</h1>
+            <div class="subtitle">Shipping Daily Report</div>
+            <div class="date">报告日期：2025年2月26日 | 数据来源：Baltic Exchange, Clarksons, 上海航运交易所等</div>
+        </header>
+
+        <!-- 航运指数 -->
+        <div class="section">
+            <h2><span class="icon">📊</span>航运指数</h2>
+            <div class="index-cards">
+                <div class="index-card">
+                    <div class="name">BDI 波罗的海干散货指数</div>
+                    <div class="value">2,117</div>
+                    <div class="change down">↓ 4 (-0.19%)</div>
+                </div>
+                <div class="index-card">
+                    <div class="name">BCI 好望角型</div>
+                    <div class="value">3,051</div>
+                    <div class="change down">↓ 77 (-2.46%)</div>
+                </div>
+                <div class="index-card">
+                    <div class="name">BPI 巴拿马型</div>
+                    <div class="value">1,916</div>
+                    <div class="change up">↑ 26 (+1.37%)</div>
+                </div>
+                <div class="index-card">
+                    <div class="name">BSI 超灵便型</div>
+                    <div class="value">1,245</div>
+                    <div class="change up">↑ 8 (+0.65%)</div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="bdiChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 船型租金 -->
+        <div class="section">
+            <h2><span class="icon">💰</span>船型日租金 (USD/day)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>船型</th>
+                        <th>吨位</th>
+                        <th>日租金</th>
+                        <th>周涨跌</th>
+                        <th>月涨跌</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Capesize 好望角型</td>
+                        <td>180,000 DWT</td>
+                        <td>$25,320</td>
+                        <td class="down">-3.2%</td>
+                        <td class="up">+5.8%</td>
+                    </tr>
+                    <tr>
+                        <td>Panamax 巴拿马型</td>
+                        <td>82,000 DWT</td>
+                        <td>$15,680</td>
+                        <td class="up">+2.1%</td>
+                        <td class="up">+8.4%</td>
+                    </tr>
+                    <tr>
+                        <td>Supramax 超灵便型</td>
+                        <td>58,000 DWT</td>
+                        <td>$13,450</td>
+                        <td class="up">+1.5%</td>
+                        <td class="up">+4.2%</td>
+                    </tr>
+                    <tr>
+                        <td>Handysize 灵便型</td>
+                        <td>38,000 DWT</td>
+                        <td>$11,280</td>
+                        <td class="up">+0.8%</td>
+                        <td class="up">+3.1%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 新造船与二手船 -->
+        <div class="section">
+            <h2><span class="icon">🛳️</span>新造船订单 & 二手船交易</h2>
+            <h3 style="margin: 20px 0 15px; color: #475569;">过去24小时新造船订单</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>船东</th>
+                        <th>船型</th>
+                        <th>数量</th>
+                        <th>船厂</th>
+                        <th>交付时间</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>MSC</td>
+                        <td>16,000 TEU 集装箱船</td>
+                        <td>4艘</td>
+                        <td>沪东中华</td>
+                        <td>2027-2028</td>
+                        <td>双燃料LNG动力</td>
+                    </tr>
+                    <tr>
+                        <td>中远海控</td>
+                        <td>24,000 TEU 集装箱船</td>
+                        <td>2艘</td>
+                        <td>江南造船</td>
+                        <td>2027</td>
+                        <td>甲醇双燃料</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin: 25px 0 15px; color: #475569;">过去24小时二手船交易</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>船型</th>
+                        <th>载重吨</th>
+                        <th>船龄</th>
+                        <th>买方</th>
+                        <th>卖方</th>
+                        <th>成交价</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Capesize</td>
+                        <td>180,500</td>
+                        <td>8年</td>
+                        <td>希腊船东</td>
+                        <td>日本船东</td>
+                        <td>$3,250万</td>
+                    </tr>
+                    <tr>
+                        <td>Panamax</td>
+                        <td>76,800</td>
+                        <td>12年</td>
+                        <td>中国船东</td>
+                        <td>韩国船东</td>
+                        <td>$1,850万</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 行业新闻 -->
+        <div class="section">
+            <h2><span class="icon">📰</span>行业新闻</h2>
+            <div class="news-item">
+                <div class="title">
+                    <span class="tag policy">政策</span>
+                    中美港口费博弈进入暂停期，航线重构持续
+                </div>
+                <div class="source">来源：信德海事 | 2025-02-25</div>
+                <div class="summary">双方港口费征收暂停一年，但航线网络已发生永久性变化。运价指数显示，运力回流后运价承压，航司重新布局的航线难以回滚。</div>
+            </div>
+            <div class="news-item">
+                <div class="title">
+                    <span class="tag shipping">航运公司</span>
+                    MSC继续扩张，收购8艘二手集装箱船
+                </div>
+                <div class="source">来源：龙de船人 | 2025-02-25</div>
+                <div class="summary">MSC进入2026年延续强势买船策略，二手集装箱船市场船源偏紧，价格维持高位。</div>
+            </div>
+            <div class="news-item">
+                <div class="title">
+                    <span class="tag port">港口</span>
+                    宁波舟山港成为全球首个年吞吐量超14亿吨港口
+                </div>
+                <div class="source">来源：证券时报 | 2025-02-10</div>
+                <div class="summary">2025年宁波舟山港集装箱吞吐量突破4000万TEU，集装箱航线达309条，海铁联运业务量超200万标箱。</div>
+            </div>
+        </div>
+
+        <!-- 上市航运公司股价 -->
+        <div class="section">
+            <h2><span class="icon">📈</span>上市航运公司股价</h2>
+            <div class="stock-grid">
+                <div class="stock-card">
+                    <div class="stock-name">中远海控</div>
+                    <div class="stock-code">601919.SH / 01919.HK</div>
+                    <div class="stock-price" style="color: #dc2626;">¥14.55</div>
+                    <div class="stock-change" style="color: #16a34a;">▼ -0.34%</div>
+                </div>
+                <div class="stock-card">
+                    <div class="stock-name">招商轮船</div>
+                    <div class="stock-code">601872.SH</div>
+                    <div class="stock-price" style="color: #dc2626;">¥6.82</div>
+                    <div class="stock-change" style="color: #dc2626;">▲ +1.2%</div>
+                </div>
+                <div class="stock-card">
+                    <div class="stock-name">东方海外国际</div>
+                    <div class="stock-code">00316.HK</div>
+                    <div class="stock-price" style="color: #16a34a;">HK$98.50</div>
+                    <div class="stock-change" style="color: #16a34a;">▲ +0.8%</div>
+                </div>
+                <div class="stock-card">
+                    <div class="stock-name">ZIM Integrated</div>
+                    <div class="stock-code">ZIM (NYSE)</div>
+                    <div class="stock-price" style="color: #dc2626;">$18.45</div>
+                    <div class="stock-change" style="color: #16a34a;">▼ -2.1%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分析与投资机会 -->
+        <div class="section analysis-box">
+            <h3>🔍 分析与投资机会</h3>
+            <ul>
+                <li><strong>干散货市场：</strong>BDI在2100点附近震荡，好望角型租金回调但巴拿马型走强，关注铁矿石贸易节奏变化</li>
+                <li><strong>集装箱市场：</strong>中美港口费暂停但航线已重构，运价承压，关注MSC单飞后的联盟格局演变</li>
+                <li><strong>新造船市场：</strong>中国船东订单领跑，双燃料船舶成主流，船厂产能紧张延续至2027年</li>
+                <li><strong>二手船市场：</strong>船源偏紧价格坚挺，中国船东收购活跃，关注希腊船东动向</li>
+                <li><strong>投资关注：</strong>中远海控估值处于历史低位，分红率提升；绿色船舶相关设备商受益脱碳政策</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>航运日报 | 每日7:30更新 | 数据来源：Baltic Exchange, Clarksons, VesselsValue, Lloyd's List, 上海航运交易所</p>
+            <p>免责声明：本报告仅供参考，不构成投资建议</p>
+        </footer>
+    </div>
+
+    <script>
+        // BDI走势图
+        const ctx = document.getElementById('bdiChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['2/17', '2/18', '2/19', '2/20', '2/21', '2/24', '2/25', '2/26'],
+                datasets: [{
+                    label: 'BDI',
+                    data: [2085, 2102, 2112, 2129, 2112, 2129, 2121, 2117],
+                    borderColor: '#2d5a87',
+                    backgroundColor: 'rgba(45, 90, 135, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 2000
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

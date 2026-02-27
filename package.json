@@ -1,0 +1,10 @@
+{
+  "name": "shipping-daily-report",
+  "version": "1.0.0",
+  "description": "航运日报 - Shipping Daily Report",
+  "scripts": {
+    "build": "echo 'Static site, no build needed'",
+    "deploy": "gh-pages -d ."
+  },
+  "homepage": "https://sma.github.io/shipping-report"
+}
