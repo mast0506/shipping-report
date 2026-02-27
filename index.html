@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>航运资讯</title>
+    <title>航运资讯周报</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -221,6 +221,17 @@
         .stock-card .stock-change { 
             font-size: 0.8rem; 
         }
+        .highlight-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .highlight-box p {
+            font-size: 0.9rem;
+            color: #92400e;
+        }
         
         /* 平板适配 */
         @media (min-width: 768px) {
@@ -254,229 +265,279 @@
 <body>
     <div class="container">
         <header>
-            <h1>🚢 航运资讯</h1>
-            <div class="subtitle">Shipping Intelligence Report</div>
-            <div class="date">2026年2月27日 星期五 | 日报</div>
+            <h1>🚢 航运资讯周报</h1>
+            <div class="subtitle">Shipping Weekly Report</div>
+            <div class="date">2026年2月23日 - 2月27日 | 第9周</div>
         </header>
 
-        <!-- 航运指数 -->
+        <!-- 航运指数周度走势分析 -->
         <div class="section">
-            <h2><span class="icon">📊</span>航运指数</h2>
+            <h2><span class="icon">📊</span>航运指数周度走势分析</h2>
             <div class="index-cards">
                 <div class="index-card">
                     <div class="name">BDI 波罗的海干散货指数</div>
                     <div class="value">2,117</div>
-                    <div class="change down">↓ 0.19% | 年+90.74%</div>
+                    <div class="change up">周+3.6% | 月+19.2% | 年+90.7%</div>
                 </div>
                 <div class="index-card">
                     <div class="name">BCI 好望角型</div>
-                    <div class="value">3,128</div>
-                    <div class="change down">↓ 2.5% | 周+2.5%</div>
+                    <div class="value">3,207</div>
+                    <div class="change down">周-0.1% | 月+15.8%</div>
                 </div>
                 <div class="index-card">
                     <div class="name">BPI 巴拿马型</div>
                     <div class="value">1,890</div>
-                    <div class="change up">↑ 1.3% | 2月新高</div>
+                    <div class="change up">周+1.3% | 2月高点</div>
                 </div>
                 <div class="index-card">
                     <div class="name">BSI 超灵便型</div>
                     <div class="value">1,255</div>
-                    <div class="change up">↑ 3.1% | 2月高点</div>
+                    <div class="change up">周+3.1% | 表现强劲</div>
                 </div>
             </div>
             <div class="chart-container">
                 <canvas id="bdiChart"></canvas>
             </div>
-        </div>
-
-        <!-- 船型租金 -->
-        <div class="section">
-            <h2><span class="icon">💰</span>船型日租金 (USD/day)</h2>
+            <div class="highlight-box">
+                <p><strong>本周要点：</strong>BDI指数本周维持在2100点以上高位运行，尽管好望角型船运价略有回调，但巴拿马型和超灵便型船运价继续上涨。VLCC油轮运价飙升至近6年新高，中东至中国航线日收益突破16万美元。</p>
+            </div>
+            
+            <h3>集装箱运价指数</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>船型</th>
-                        <th>载重吨</th>
-                        <th>日租金</th>
-                        <th>对比10年均值</th>
+                        <th>指数</th>
+                        <th>本期 (2/27)</th>
+                        <th>上期 (2/13)</th>
+                        <th>周涨跌</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Capesize</td>
-                        <td>~180K dwt</td>
-                        <td>$26,725-30K</td>
-                        <td style="color:#dc2626">+34%</td>
+                        <td>SCFI 上海出口集装箱运价指数</td>
+                        <td>1,333.11</td>
+                        <td>1,251.46</td>
+                        <td style="color:#dc2626">+6.5%</td>
                     </tr>
                     <tr>
-                        <td>Panamax</td>
-                        <td>60-70K dwt</td>
-                        <td>$13,207-16K</td>
-                        <td style="color:#16a34a">-6%</td>
-                    </tr>
-                    <tr style="background:#fef3c7">
-                        <td><strong>VLCC</strong></td>
-                        <td>~300K dwt</td>
-                        <td><strong>$74K-102K</strong></td>
-                        <td style="color:#dc2626"><strong>6年新高</strong></td>
-                    </tr>
-                    <tr style="background:#fef3c7">
-                        <td><strong>Suezmax</strong></td>
-                        <td>~160K dwt</td>
-                        <td><strong>$61K-77K</strong></td>
-                        <td style="color:#dc2626"><strong>近翻倍</strong></td>
+                        <td>CCFI 中国出口集装箱运价指数</td>
+                        <td>1,044.57</td>
+                        <td>1,088.14</td>
+                        <td style="color:#16a34a">-4.0%</td>
                     </tr>
                 </tbody>
             </table>
-            <p style="margin-top:12px;color:#64748b;font-size:0.8rem">ClarkSea: $33K-34K/天 | 同比+43%</p>
         </div>
 
-        <!-- 船舶价格指数 -->
+        <!-- 新造船订单和二手船交易 -->
         <div class="section">
-            <h2><span class="icon">🏷️</span>船舶价格指数</h2>
-            <div class="index-cards">
-                <div class="index-card">
-                    <div class="name">新造船价格指数</div>
-                    <div class="value">184.65</div>
-                    <div class="change down">同比 -2.4%</div>
-                </div>
-                <div class="index-card">
-                    <div class="name">二手船价格指数</div>
-                    <div class="value">191.07</div>
-                    <div class="change up">同比 +8.6%</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 新造船与二手船 -->
-        <div class="section">
-            <h2><span class="icon">🛳️</span>新造船订单 & 二手船交易</h2>
-            <h3>过去24小时新造船订单亮点</h3>
+            <h2><span class="icon">🛳️</span>新造船订单与二手船交易周度统计</h2>
+            
+            <h3>本周新造船订单亮点</h3>
             <table>
                 <thead>
                     <tr>
+                        <th>日期</th>
                         <th>船东</th>
                         <th>船型</th>
                         <th>数量</th>
                         <th>船厂</th>
+                        <th>金额</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>长荣海运</td>
-                        <td>3,000 TEU</td>
-                        <td>16艘</td>
-                        <td>黄埔文冲</td>
+                        <td>2月26日</td>
+                        <td>Tsakos Group</td>
+                        <td>LNG Carrier (174K cbm)</td>
+                        <td>1艘</td>
+                        <td>HD Hyundai HHI</td>
+                        <td>$2.54亿</td>
                     </tr>
                     <tr>
-                        <td>达飞轮船</td>
-                        <td>18K TEU LNG双燃料</td>
-                        <td>12艘</td>
-                        <td>江南造船</td>
-                    </tr>
-                    <tr>
-                        <td>Capital Ship</td>
-                        <td>VLCC</td>
-                        <td>15艘</td>
-                        <td>恒力重工</td>
+                        <td>2月</td>
+                        <td>KMTC (韩国海运)</td>
+                        <td>集装箱船</td>
+                        <td>6艘</td>
+                        <td>HD Hyundai</td>
+                        <td>$2.58亿</td>
                     </tr>
                 </tbody>
             </table>
-
-            <h3>过去24小时二手船交易</h3>
+            <p style="margin-top:10px;color:#64748b;font-size:0.8rem">📌 Tsakos Group时隔7年重返LNG新造船市场，订单含额外选择权</p>
+            
+            <h3>本周二手船交易动态</h3>
             <table>
                 <thead>
                     <tr>
+                        <th>日期</th>
                         <th>船型</th>
+                        <th>卖方</th>
                         <th>买方</th>
                         <th>成交价</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>VLCC (318K dwt)</td>
+                    <tr style="background:#fef3c7">
+                        <td>2月22日</td>
+                        <td>VLCC (318K dwt, 2013建)</td>
+                        <td>Teekay Tankers</td>
                         <td>Sinokor</td>
                         <td>$8,450万</td>
                     </tr>
-                    <tr>
-                        <td>VLCC (311K dwt)</td>
+                    <tr style="background:#fef3c7">
+                        <td>2月</td>
+                        <td>VLCC (314K dwt×2, 2012建)</td>
+                        <td>CMB.TECH</td>
                         <td>Sinokor</td>
-                        <td>$8,650万</td>
+                        <td>约$1.7亿</td>
                     </tr>
                 </tbody>
             </table>
-            <p style="margin-top:10px;color:#64748b;font-size:0.75rem">📌 Sinokor控制全球约17% VLCC运力</p>
+            <div class="highlight-box">
+                <p><strong>二手船市场热点：</strong>VLCC二手船价值同比飙升57%，15年船龄VLCC价值从2025年2月的5300万美元涨至2026年2月的8300万美元。Sinokor本月已收购5艘VLCC，今年以来累计收购超40艘，成为全球VLCC二手市场最活跃买家。</p>
+            </div>
         </div>
 
-        <!-- 行业新闻 -->
+        <!-- 重要行业新闻回顾 -->
         <div class="section">
-            <h2><span class="icon">📰</span>行业新闻</h2>
-            <div class="news-item">
-                <div class="title">
-                    <span class="tag policy">政策</span>
-                    美国拟对中国船舶征收最高150万美元港口费
-                </div>
-                <div class="source">Reuters | 2026-02-28</div>
-                <div class="summary">USTR 301调查结论公布，3月24日听证，特朗普最终决定。</div>
-            </div>
-            <div class="news-item">
-                <div class="title">
-                    <span class="tag port">港口</span>
-                    巴拿马终止和记黄埔港口特许经营权
-                </div>
-                <div class="source">Splash247 | 2026-02-23</div>
-                <div class="summary">马士基和MSC将临时接管巴拿马运河两个港口。</div>
-            </div>
+            <h2><span class="icon">📰</span>重要行业新闻回顾 (2/23-2/27)</h2>
+            
             <div class="news-item">
                 <div class="title">
                     <span class="tag shipping">航运</span>
-                    MSC正式推出独立航线网络
+                    ONE宣布CEO交接安排
                 </div>
-                <div class="source">行业资讯 | 2026-02</div>
-                <div class="summary">取代2M联盟，船队220艘中国建造船舶。</div>
+                <div class="source">信德海事 | 2026年2月25日</div>
+                <div class="summary">全球第六大集装箱班轮公司Ocean Network Express（ONE）宣布现任CEO Jeremy Nixon将于7月1日卸任，转任高级顾问职务。这是ONE自2017年成立以来的首次最高管理层变动。</div>
+            </div>
+            
+            <div class="news-item">
+                <div class="title">
+                    <span class="tag shipping">航运</span>
+                    马士基调整航线绕行好望角
+                </div>
+                <div class="source">Global Banking & Finance | 2026年2月27日</div>
+                <div class="summary">马士基因红海运营限制，临时调整服务航线绕行非洲好望角。尽管胡塞武装袭击已停止，但航运公司仍保持谨慎态度，部分航线开始逐步恢复苏伊士运河通行。</div>
+            </div>
+            
+            <div class="news-item">
+                <div class="title">
+                    <span class="tag policy">政策</span>
+                    美国施压或阻碍航运碳税实施
+                </div>
+                <div class="source">The Guardian | 2026年2月26日</div>
+                <div class="summary">美国就拟议中的航运碳税 levy 向各国施压，巴拿马已撤回支持。业界担心美国的强硬立场可能破坏国际海事组织(IMO)的碳减排计划。</div>
+            </div>
+            
+            <div class="news-item">
+                <div class="title">
+                    <span class="tag market">市场</span>
+                    VLCC运价飙升至6年新高
+                </div>
+                <div class="source">Investing.com | 2026年2月25日</div>
+                <div class="summary">超大型油轮(VLCC)即期运价飙升至近6年最高水平，中东至中国航线日收益突破16.3万美元。波罗的海交易所VLCC TCE指数达13.2万美元/天，一周内涨幅22.8%。</div>
+            </div>
+            
+            <div class="news-item">
+                <div class="title">
+                    <span class="tag shipping">航运</span>
+                    红海护航舰队延长驻留期限
+                </div>
+                <div class="source">TradeWinds | 2026年2月23日</div>
+                <div class="summary">红海海军护航部队延长驻留期限。自2025年9月以来未发生致命袭击，部分航运公司开始考虑恢复红海航线。MPC Container Ships表示，船队老龄化降低了支线船红海复航风险。</div>
+            </div>
+            
+            <div class="news-item">
+                <div class="title">
+                    <span class="tag shipping">航运</span>
+                    ZIM以色列总部800人罢工
+                </div>
+                <div class="source">信德海事 | 2026年2月23日</div>
+                <div class="summary">ZIM Integrated Shipping在以色列的总部员工于2月17日宣布全面罢工，涉及约800名员工。罢工获得当地市长支持，对公司运营造成一定影响。</div>
             </div>
         </div>
 
-        <!-- 上市航运公司股价 -->
+        <!-- 上市航运公司股价周度表现 -->
         <div class="section">
-            <h2><span class="icon">📈</span>上市航运公司股价</h2>
+            <h2><span class="icon">📈</span>上市航运公司股价周度表现</h2>
             <div class="stock-grid">
-                <div class="stock-card" style="background:#fef3c7">
-                    <div class="stock-name">🔥 招商轮船</div>
-                    <div class="stock-code">601872.SH</div>
-                    <div class="stock-price" style="color: #dc2626;">¥13.41</div>
-                    <div class="stock-change" style="color: #dc2626;">+10.01% 涨停 | 年+92.88%</div>
+                <div class="stock-card">
+                    <div class="stock-name">A.P. Moller-Maersk</div>
+                    <div class="stock-code">MAERSK-B.CO (哥本哈根)</div>
+                    <div class="stock-price" style="color: #1e3a5f;">DKK 15,695</div>
+                    <div class="stock-change" style="color: #64748b;">市值 1962.8亿DKK | PE 6.6x</div>
                 </div>
                 <div class="stock-card">
                     <div class="stock-name">中远海控</div>
-                    <div class="stock-code">A/H股</div>
-                    <div class="stock-price" style="color: #dc2626;">¥15.10 / HK$14.32</div>
-                    <div class="stock-change" style="color: #dc2626;">A+1.82% | 年+9.16%</div>
+                    <div class="stock-code">601919.SS (上海)</div>
+                    <div class="stock-price" style="color: #1e3a5f;">¥14.80</div>
+                    <div class="stock-change" style="color: #64748b;">市值 ¥2310.5亿 | 股息率 10.7%</div>
                 </div>
                 <div class="stock-card">
-                    <div class="stock-name">ZIM</div>
-                    <div class="stock-code">NYSE</div>
-                    <div class="stock-price" style="color: #16a34a;">$22.10</div>
-                    <div class="stock-change" style="color: #16a34a;">+0.18% | 年+41.75% | PE 2.7x</div>
+                    <div class="stock-name">ZIM Integrated Shipping</div>
+                    <div class="stock-code">ZIM (NYSE)</div>
+                    <div class="stock-price" style="color: #1e3a5f;">$29.09</div>
+                    <div class="stock-change" style="color: #16a34a;">接近52周高点$29.97 | PE 2.6x</div>
+                </div>
+                <div class="stock-card">
+                    <div class="stock-name">Hapag-Lloyd</div>
+                    <div class="stock-code">HLAG.DE (德国)</div>
+                    <div class="stock-price" style="color: #1e3a5f;">€113.20</div>
+                    <div class="stock-change" style="color: #64748b;">市值 €214.7亿 | PE 8.6x</div>
                 </div>
             </div>
+            
+            <h3>本周股价表现总结</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>公司</th>
+                        <th>本周走势</th>
+                        <th>关键指标</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Maersk</td>
+                        <td>稳健</td>
+                        <td>股息率8.45%，估值处于历史低位</td>
+                    </tr>
+                    <tr>
+                        <td>中远海控</td>
+                        <td>震荡</td>
+                        <td>高股息率10.7%，A/H股溢价282%</td>
+                    </tr>
+                    <tr>
+                        <td>ZIM</td>
+                        <td>强势</td>
+                        <td>接近52周高点，PE仅2.6倍</td>
+                    </tr>
+                    <tr>
+                        <td>Hapag-Lloyd</td>
+                        <td>承压</td>
+                        <td>股价距52周高点下跌34%</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <!-- 分析与投资机会 -->
+        <!-- 下周市场展望和投资建议 -->
         <div class="section analysis-box">
-            <h3>🔍 分析与投资机会</h3>
+            <h3>🔮 下周市场展望与投资建议</h3>
             <ul>
-                <li><strong>干散货：</strong>BDI近一年+90%，好望角型租金高于均值34%</li>
-                <li><strong>油轮：</strong>VLCC创6年新高，Sinokor控制17%运力</li>
-                <li><strong>新造船：</strong>恒力重工接单活跃，排期至2028-2030</li>
-                <li><strong>投资：</strong>招商轮船年+93%，ZIM股息率14.8%</li>
-                <li><strong>风险：</strong>美国港口费3/24听证，中美贸易关系</li>
+                <li><strong>干散货市场：</strong>BDI指数有望维持在2000点以上高位，好望角型船运价短期或继续震荡，巴拿马型和超灵便型船表现相对稳健</li>
+                <li><strong>油轮市场：</strong>VLCC运价有望维持高位，3月初中东货运需求释放，运力紧张格局短期内难以改变</li>
+                <li><strong>集装箱市场：</strong>SCFI指数反弹显示节后需求回暖，但全年运力过剩压力仍存，需关注3月美线长约谈判</li>
+                <li><strong>新造船市场：</strong>LNG船订单持续活跃，韩国船厂排期已至2028年后，中国船厂份额持续提升</li>
+                <li><strong>投资风险提示：</strong>关注美国对华船舶港口费政策进展(3月24日听证)、中美贸易关系、以及IMO碳税谈判进展</li>
             </ul>
         </div>
 
         <footer>
-            <p>数据来源：Baltic Exchange, Clarksons, VesselsValue, Lloyd's List, 上海航运交易所, Investing.com</p>
-            <p>更新时间：每日7:30 | 周六更新周报 | 仅供参考，不构成投资建议</p>
+            <p>数据来源：Baltic Exchange, Clarksons, Lloyd's List, TradeWinds, Maritime Executive, 上海航运交易所, 信德海事网</p>
+            <p>报告周期：2026年2月23日-27日 | 更新时间：2026年2月27日 | 仅供参考，不构成投资建议</p>
+            <p><a href="weekly.html">查看历史周报</a></p>
         </footer>
     </div>
 
@@ -485,10 +546,10 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['2/17', '2/18', '2/19', '2/20', '2/21', '2/24', '2/25', '2/26'],
+                labels: ['2/17', '2/18', '2/19', '2/20', '2/21', '2/24', '2/25', '2/26', '2/27'],
                 datasets: [{
                     label: 'BDI',
-                    data: [2085, 2102, 2112, 2129, 2112, 2129, 2121, 2117],
+                    data: [2085, 2102, 2112, 2043, 2089, 2129, 2121, 2117, 2117],
                     borderColor: '#2d5a87',
                     backgroundColor: 'rgba(45, 90, 135, 0.1)',
                     tension: 0.4,
@@ -498,7 +559,13 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                plugins: { 
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'BDI周度走势 (2月17日-27日)'
+                    }
+                },
                 scales: { y: { beginAtZero: false, min: 2000 } }
             }
         });
